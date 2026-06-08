@@ -6,7 +6,7 @@
     <title>Premium Promo</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     
     <style>
@@ -20,7 +20,7 @@
         }
 
         body {
-            background: linear-gradient(180deg, #0f1225 0%, #060711 100%);
+            background: radial-gradient(circle at top, #161933 0%, #05060d 100%);
             color: #ffffff;
             display: flex;
             justify-content: center;
@@ -43,31 +43,32 @@
         /* Хедер */
         .header {
             text-align: center;
-            margin-top: 10px;
+            margin-top: 15px;
             width: 100%;
         }
 
         .brand-logo {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 900;
-            letter-spacing: 1.5px;
-            color: #ffffff;
-            margin-bottom: 25px;
-        }
-
-        .brand-logo span {
-            color: #00ffcc;
-            margin-left: 4px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #00f0ff, #7f00ff);
+            -webkit-background-clip: text;
+            background-clip: text; /* Фикс ошибки из скриншота */
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 2px 8px rgba(0, 240, 255, 0.2));
         }
 
         .header h2 {
-            font-size: 20px;
+            font-size: 21px;
             font-weight: 700;
             line-height: 1.4;
-            padding: 0 20px;
+            color: #f1f3f7;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
         }
 
-        /* Контейнер с карточками */
+        /* Контейнер выбора бонусов */
         .promo-slider {
             position: relative;
             width: 100%;
@@ -78,10 +79,10 @@
         }
 
         .pointer-arrow {
-            font-size: 24px;
-            color: #00f0ff;
-            margin-bottom: 16px;
-            text-shadow: 0 0 10px #00f0ff;
+            font-size: 20px;
+            color: #00ffcc;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 8px rgba(0, 255, 204, 0.6));
             animation: bounce 1.5s infinite;
         }
 
@@ -93,122 +94,149 @@
         .cards-container {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            align-items: center;
+            gap: 12px;
             width: 100%;
         }
 
-        /* Стили карточек */
+        /* Дорогие 3D карточки */
         .promo-card {
             position: relative;
             flex: 1;
-            height: 160px;
-            border-radius: 12px;
+            height: 195px;
+            border-radius: 16px;
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
+            justify-content: space-between;
             align-items: center;
-            padding: 16px 4px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.25s ease;
+            padding: 22px 10px;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 12px 30px rgba(0, 0, 0, 0.7);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             overflow: hidden;
-            opacity: 0.4;
+            opacity: 0.3;
             transform: scale(0.9);
         }
 
-        .card-purple { background: linear-gradient(180deg, #2b113a 0%, #160720 100%); }
-        .card-green { background: linear-gradient(180deg, #123524 0%, #071910 100%); }
-        .card-blue { background: linear-gradient(180deg, #112046 0%, #070e24 100%); }
+        .card-purple { background: linear-gradient(180deg, rgba(38, 12, 59, 0.6) 0%, rgba(12, 4, 20, 0.85) 100%); }
+        .card-green { background: linear-gradient(180deg, rgba(10, 43, 30, 0.6) 0%, rgba(4, 15, 10, 0.85) 100%); }
+        .card-blue { background: linear-gradient(180deg, rgba(12, 26, 61, 0.6) 0%, rgba(4, 8, 20, 0.85) 100%); }
 
+        /* Эффекты АКТИВНОЙ карты */
         .promo-card.active {
             opacity: 1;
-            transform: scale(1.05);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            transform: scale(1.06) translateY(-4px);
         }
 
-        .card-purple.active { border-color: #d900ff; box-shadow: 0 0 15px rgba(217, 0, 255, 0.2); }
-        .card-green.active { border-color: #00ffcc; box-shadow: 0 0 15px rgba(0, 255, 204, 0.2); }
-        .card-blue.active { border-color: #0066ff; box-shadow: 0 0 15px rgba(0, 102, 255, 0.2); }
+        .card-purple.active { border-color: #d900ff; box-shadow: 0 0 30px rgba(217, 0, 255, 0.25), inset 0 1px 8px rgba(217, 0, 255, 0.15); }
+        .card-green.active { border-color: #00ffcc; box-shadow: 0 0 30px rgba(0, 255, 204, 0.25), inset 0 1px 8px rgba(0, 255, 204, 0.15); }
+        .card-blue.active { border-color: #0077ff; box-shadow: 0 0 30px rgba(0, 119, 255, 0.25), inset 0 1px 8px rgba(0, 119, 255, 0.15); }
 
+        /* Иконки */
         .card-icon-wrap {
-            margin-bottom: auto;
-            margin-top: 15px;
-            transition: transform 0.25s;
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+            transition: transform 0.3s;
         }
 
         .promo-card.active .card-icon-wrap {
             transform: scale(1.1);
         }
 
-        .fake-3d-icon {
-            font-size: 32px;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
+        .neon-icon {
+            font-size: 22px;
+            font-weight: 900;
+            text-shadow: 0 0 12px currentColor;
         }
+        .card-purple .neon-icon { color: #e000ff; }
+        .card-green .neon-icon { color: #00ffcc; }
+        .card-blue .neon-icon { color: #0088ff; }
 
         .card-title {
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 700;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.5px;
             text-align: center;
-            color: #e2e4e9;
+            color: #8fa0ba;
+            text-transform: uppercase;
+        }
+        .promo-card.active .card-title {
+            color: #ffffff;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
         }
 
-        /* Кнопка и меню внизу */
+        /* Блок управления */
         .controls-block {
             width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            margin-bottom: 10px;
+            gap: 18px;
+            margin-bottom: 12px;
         }
 
+        /* ГРАДИЕНТНАЯ НЕОНОВАЯ КНОПКА НА ВСЮ ШИРИНУ */
         #spin-btn {
             width: 100%;
-            padding: 18px;
-            background: linear-gradient(90deg, #1c4e3d 0%, #113327 100%);
-            border: 1px solid #00ffcc;
-            border-radius: 10px;
-            color: #00ffcc;
+            padding: 20px;
+            background: linear-gradient(180deg, #153a30 0%, #071712 100%);
+            border: 1.5px solid #00ffcc;
+            border-radius: 12px;
+            color: #ffffff;
             font-size: 13px;
             font-weight: 800;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
             cursor: pointer;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.15);
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.15), inset 0 1px 1px rgba(255,255,255,0.1);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.6);
             transition: all 0.2s ease;
         }
 
         #spin-btn:active {
             transform: scale(0.98);
-            background: #00ffcc;
-            color: #000000;
-            box-shadow: 0 0 25px #00ffcc;
+            background: linear-gradient(180deg, #00ffcc 0%, #00b38f 100%);
+            color: #05060d;
+            box-shadow: 0 0 30px #00ffcc;
+            text-shadow: none;
         }
 
+        /* Табы */
         .tabs-menu {
             display: flex;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 4px;
+            background: #0e101d;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 5px;
             width: 100%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
         }
 
         .tab-item {
             flex: 1;
             text-align: center;
-            padding: 12px;
+            padding: 13px;
             font-size: 12px;
             font-weight: 600;
-            color: #6d7385;
-            border-radius: 6px;
+            color: #4e5569;
+            border-radius: 8px;
         }
 
         .tab-item.active {
-            background: rgba(255, 255, 255, 0.05);
+            background: #191c32;
             color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.03);
         }
 
-        /* Модалка */
+        /* Модалка выигрыша */
         .modal {
             display: none;
             position: fixed;
@@ -216,7 +244,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(5, 6, 12, 0.98);
+            background: rgba(4, 5, 10, 0.98);
             z-index: 100;
             justify-content: center;
             align-items: center;
@@ -224,42 +252,43 @@
         }
 
         .modal-content {
-            background: #0f1225;
-            border: 1px solid rgba(0, 255, 204, 0.3);
-            padding: 40px 20px;
-            border-radius: 20px;
+            background: radial-gradient(circle at top, #1a1d3a 0%, #090a12 100%);
+            border: 1px solid rgba(0, 255, 204, 0.35);
+            padding: 45px 24px;
+            border-radius: 24px;
             text-align: center;
-            max-width: 360px;
+            max-width: 350px;
             width: 100%;
-            box-shadow: 0 0 40px rgba(0, 255, 204, 0.1);
+            box-shadow: 0 0 45px rgba(0, 255, 204, 0.12);
         }
 
         .modal.show { display: flex; }
 
         .modal-badge {
             display: inline-block;
-            font-size: 9px;
-            font-weight: 800;
-            background: rgba(0, 255, 204, 0.1);
+            font-size: 10px;
+            font-weight: 900;
+            background: rgba(0, 255, 204, 0.08);
             color: #00ffcc;
-            padding: 4px 12px;
+            padding: 5px 16px;
             border-radius: 20px;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             letter-spacing: 1px;
+            border: 1px solid rgba(0, 255, 204, 0.15);
         }
 
         .modal h2 {
-            font-size: 20px;
+            font-size: 21px;
             font-weight: 800;
             margin-bottom: 20px;
         }
 
         .prize-display {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 20px 12px;
-            border-radius: 12px;
-            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 22px 12px;
+            border-radius: 14px;
+            margin-bottom: 24px;
         }
 
         #prize-text {
@@ -267,33 +296,34 @@
             color: #00ffcc;
             font-weight: 700;
             line-height: 1.4;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
         }
 
         .modal-desc {
             font-size: 12px;
-            color: #6d7385;
+            color: #555b70;
             line-height: 1.6;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
         }
 
         #claim-btn {
             width: 100%;
-            padding: 16px;
-            background: #00ffcc;
+            padding: 18px;
+            background: linear-gradient(180deg, #00ffcc 0%, #00b38f 100%);
             border: none;
-            border-radius: 10px;
-            color: #000000;
+            border-radius: 12px;
+            color: #05060d;
             font-size: 14px;
-            font-weight: 700;
+            font-weight: 800;
             cursor: pointer;
-            box-shadow: 0 5px 20px rgba(0, 255, 204, 0.3);
+            box-shadow: 0 5px 25px rgba(0, 255, 204, 0.35);
         }
     </style>
 </head>
 <body>
     <div class="app-container">
         <div class="header">
-            <div class="brand-logo">SYSTEM<span>PROMO</span></div>
+            <div class="brand-logo">SLOT SYSTEM</div>
             <h2>Ваш бонус готовий до роздачі!</h2>
         </div>
 
@@ -303,40 +333,40 @@
             <div class="cards-container">
                 <div class="promo-card card-purple" id="card-0">
                     <div class="card-icon-wrap">
-                        <div class="fake-3d-icon">%</div>
+                        <div class="neon-icon">%</div>
                     </div>
-                    <div class="card-title">% ДО ДЕПОЗИТУ</div>
+                    <div class="card-title">% до депозиту</div>
                 </div>
 
                 <div class="promo-card card-green active" id="card-1">
                     <div class="card-icon-wrap">
-                        <div class="fake-3d-icon">🎰</div>
+                        <div class="neon-icon">777</div>
                     </div>
-                    <div class="card-title">БЕЗДЕПИ</div>
+                    <div class="card-title">Бездепи</div>
                 </div>
 
                 <div class="promo-card card-blue" id="card-2">
                     <div class="card-icon-wrap">
-                        <div class="fake-3d-icon">+</div>
+                        <div class="neon-icon">+</div>
                     </div>
-                    <div class="card-title">% НА ДЕПОЗИТ</div>
+                    <div class="card-title">% на депозит</div>
                 </div>
             </div>
         </div>
 
         <div class="controls-block">
-            <button id="spin-btn">КРУТИТИ БАРАБАН І ОТРИМАТИ БОНУС</button>
+            <button id="spin-btn">Крутити барабан і отримати бонус</button>
             
             <div class="tabs-menu">
                 <div class="tab-item active">Список призів</div>
-                <div class="tab-item">Історія бонусів</div>
+                <div class="tab-item">Історія ваших бонусів</div>
             </div>
         </div>
     </div>
 
     <div id="win-modal" class="modal">
         <div class="modal-content">
-            <div class="modal-badge">АКТИВАЦІЯ</div>
+            <div class="modal-badge">УСПІШНО</div>
             <h2>БОНУС ЗГЕНЕРОВАНО!</h2>
             <div class="prize-display">
                 <p id="prize-text">250 БЕЗКОШТОВНИХ СПІНІВ + 200% ДО ДЕПОЗИТУ</p>
