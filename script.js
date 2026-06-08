@@ -1,8 +1,6 @@
-// Инициализация Telegram WebApp
 const tg = window.Telegram.WebApp;
-tg.expand(); // Расширяем аппку на весь экран
+tg.expand();
 
-// Получаем user_id из URL (который передал наш бот)
 const urlParams = new URLSearchParams(window.location.search);
 const userId = urlParams.get('user_id');
 if (userId) {
@@ -15,25 +13,24 @@ const spinBtn = document.getElementById('spin-btn');
 const modal = document.getElementById('win-modal');
 const claimBtn = document.getElementById('claim-btn');
 
-// Названия секторов на колесе
+// Строгие, аккуратные названия без смайлов
 const prizes = [
-    "50 ФРІСПІНІВ",
-    "💥 СУПЕР ПРИЗ 💥",
-    "100 ФРІСПІНІВ",
-    "СПРОБУЙ ЩЕ РАЗ",
-    "🎁 КРАЩИЙ БОНУС 🎁",
-    "20 ФРІСПІНІВ"
+    "50 Free Spins",
+    "💥 MEGA BONUS 💥",
+    "100 Free Spins",
+    "10 Free Spins",
+    "🔥 SUPER BONUS 🔥",
+    "25 Free Spins"
 ];
 
-// Цвета секторов (чередуем фиолетовый и темный)
-const colors = ["#2a1454", "#1a0b36", "#2a1454", "#1a0b36", "#2a1454", "#1a0b36"];
+// Премиальная темная палитра для секторов
+const colors = ["#1b1e27", "#14161d", "#1b1e27", "#14161d", "#1b1e27", "#14161d"];
 const numSectors = prizes.length;
 const arc = 2 * Math.PI / numSectors;
 
 let startAngle = 0;
 let isSpinning = false;
 
-// Отрисовка колеса на Canvas
 function drawWheel() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const radius = canvas.width / 2;
@@ -43,67 +40,66 @@ function drawWheel() {
         const angle = startAngle + i * arc;
         ctx.fillStyle = colors[i];
         
-        // Рисуем сектор
         ctx.beginPath();
         ctx.moveTo(center, center);
-        ctx.arc(center, center, radius - 10, angle, angle + arc);
+        ctx.arc(center, center, radius - 5, angle, angle + arc);
         ctx.lineTo(center, center);
         ctx.fill();
         
-        // Рисуем золотую рамку секторов
-        ctx.strokeStyle = "#ffd700";
-        ctx.lineWidth = 1.5;
+        // Разделительные линии секторов (аккуратные, темно-серые)
+        ctx.strokeStyle = "#222530";
+        ctx.lineWidth = 2;
         ctx.stroke();
 
-        // Текст сектора
+        // Текст на секторах
         ctx.save();
-        ctx.fillStyle = "#fff";
-        // Выделяем золотом супер-призы
-        if (prizes[i].includes("ПРИЗ") || prizes[i].includes("БОНУС")) {
-            ctx.fillStyle = "#ffd700";
+        ctx.fillStyle = "#a3a7b5"; // Матовый белый/серый цвет для обычного текста
+        
+        // Подсвечиваем главный выигрыш неоновым цветом
+        if (prizes[i].includes("BONUS")) {
+            ctx.fillStyle = "#00f0ff";
         }
+        
         ctx.translate(center, center);
         ctx.rotate(angle + arc / 2);
         ctx.textAlign = "right";
-        ctx.font = "bold 12px sans-serif";
-        ctx.fillText(prizes[i], radius - 25, 5);
+        ctx.font = "600 11px 'Inter', sans-serif";
+        ctx.fillText(prizes[i], radius - 25, 4);
         ctx.restore();
     }
 
-    // Внутренний золотой круг под кнопкой
+    // Внутреннее аккуратное кольцо
     ctx.beginPath();
-    ctx.arc(center, center, 45, 0, 2 * Math.PI);
-    ctx.fillStyle = "#ffd700";
+    ctx.arc(center, center, 40, 0, 2 * Math.PI);
+    ctx.fillStyle = "#1f222c";
     ctx.fill();
+    ctx.strokeStyle = "#222530";
+    ctx.stroke();
 }
 
-// Запуск анимации кручения
 spinBtn.addEventListener('click', () => {
     if (isSpinning) return;
     isSpinning = true;
-    spinBtn.style.display = 'none'; // Прячем кнопку, чтоб не тыкали дважды
+    spinBtn.style.opacity = '0';
+    spinBtn.style.pointerEvents = 'none';
 
-    // Скрипт ЖЕСТКОЙ ПОДКУПКИ:
-    // Целимся строго в сектор №1 ("💥 СУПЕР ПРИЗ 💥")
+    // Скрипт по-прежнему бьет точно в цель — сектор №1 ("💥 MEGA BONUS 💥")
     const targetSector = 1; 
-    
-    // Рассчитываем угол так, чтобы стрелка (вверху, это угол -Math.PI/2) указала на нужный сектор
     const sectorAngle = (2 * Math.PI) / numSectors;
     const targetAngle = (3 * Math.PI / 2) - (targetSector * sectorAngle) - (sectorAngle / 2);
     
-    // Делаем 5 полных оборотов для красоты + выходим на нужный угол
-    const totalRotation = (2 * Math.PI * 5) + targetAngle - (startAngle % (2 * Math.PI));
+    const totalRotation = (2 * Math.PI * 6) + targetAngle - (startAngle % (2 * Math.PI));
     
     let currentRotation = 0;
-    const duration = 4000; // 4 секунды кручения
+    const duration = 4500; // Чуть более плавное и долгое кручение (4.5 сек)
     const start = performance.now();
 
     function animate(now) {
         const elapsed = now - start;
         const progress = Math.min(elapsed / duration, 1);
         
-        // Функция замедления (Ease-out)
-        const easeOut = 1 - Math.pow(1 - progress, 3);
+        // Плавный Ease-out
+        const easeOut = 1 - Math.pow(1 - progress, 4);
         
         startAngle = startAngle + (totalRotation * easeOut) - currentRotation;
         currentRotation = totalRotation * easeOut;
@@ -113,26 +109,19 @@ spinBtn.addEventListener('click', () => {
         if (progress < 1) {
             requestAnimationFrame(animate);
         } else {
-            // Колесо остановилось! Выводим победу
             setTimeout(() => {
                 modal.classList.add('show');
-            }, 500);
+            }, 600);
         }
     }
 
     requestAnimationFrame(animate);
 });
 
-// Когда юзер жмет финальную кнопку "Забрать бонус"
 claimBtn.addEventListener('click', () => {
-    const finalPrize = "250 FREE SPINS + 200% FIRST DEPOSIT BONUS";
-    
-    // Отправляем данные обратно в ТГ бот
+    const finalPrize = "250 FREE SPINS + 200% BONUS";
     tg.sendData(finalPrize); 
-    
-    // Закрываем WebApp
     tg.close(); 
 });
 
-// Первый рендер при загрузке
 drawWheel();
