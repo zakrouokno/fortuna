@@ -13,18 +13,18 @@ const spinBtn = document.getElementById('spin-btn');
 const modal = document.getElementById('win-modal');
 const claimBtn = document.getElementById('claim-btn');
 
-// Строгие, аккуратные названия без смайлов
+// Строгие лаконичные названия на украинском без дешевых эмодзи
 const prizes = [
-    "50 Free Spins",
-    "💥 MEGA BONUS 💥",
-    "100 Free Spins",
-    "10 Free Spins",
-    "🔥 SUPER BONUS 🔥",
-    "25 Free Spins"
+    "50 ВІЛЬНИХ СПІНІВ",
+    "MEGA BONUS",
+    "100 ВІЛЬНИХ СПІНІВ",
+    "10 ВІЛЬНИХ СПІНІВ",
+    "SUPER BONUS",
+    "25 ВІЛЬНИХ СПІНІВ"
 ];
 
-// Премиальная темная палитра для секторов
-const colors = ["#1b1e27", "#14161d", "#1b1e27", "#14161d", "#1b1e27", "#14161d"];
+// Матовые темные оттенки для премиального монохромного вида
+const colors = ["#161822", "#11131a", "#161822", "#11131a", "#161822", "#11131a"];
 const numSectors = prizes.length;
 const arc = 2 * Math.PI / numSectors;
 
@@ -36,26 +36,29 @@ function drawWheel() {
     const radius = canvas.width / 2;
     const center = radius;
 
+    // 1. Рисуем секторы колеса
     for (let i = 0; i < numSectors; i++) {
         const angle = startAngle + i * arc;
         ctx.fillStyle = colors[i];
         
         ctx.beginPath();
         ctx.moveTo(center, center);
-        ctx.arc(center, center, radius - 5, angle, angle + arc);
+        ctx.arc(center, center, radius - 10, angle, angle + arc);
         ctx.lineTo(center, center);
         ctx.fill();
         
-        // Разделительные линии секторов (аккуратные, темно-серые)
-        ctx.strokeStyle = "#222530";
-        ctx.lineWidth = 2;
+        // Тонкие стильные разделительные линии между секторами
+        ctx.strokeStyle = "#232736";
+        ctx.lineWidth = 1.5;
         ctx.stroke();
 
-        // Текст на секторах
+        // 2. Рисуем текст (Принудительно задаем шрифт Inter, который подключен в HTML)
         ctx.save();
-        ctx.fillStyle = "#a3a7b5"; // Матовый белый/серый цвет для обычного текста
         
-        // Подсвечиваем главный выигрыш неоновым цветом
+        // По умолчанию аккуратный приглушенный серебряный цвет текста
+        ctx.fillStyle = "#8a8f9f"; 
+        
+        // Подсвечиваем главные выигрышные секторы неоновым цианом
         if (prizes[i].includes("BONUS")) {
             ctx.fillStyle = "#00f0ff";
         }
@@ -63,27 +66,42 @@ function drawWheel() {
         ctx.translate(center, center);
         ctx.rotate(angle + arc / 2);
         ctx.textAlign = "right";
-        ctx.font = "600 11px 'Inter', sans-serif";
-        ctx.fillText(prizes[i], radius - 25, 4);
+        
+        // Ставим правильный дорогой шрифт вместо дефолтного системного
+        ctx.font = "bold 11px 'Inter', sans-serif"; 
+        ctx.letterSpacing = "0.5px";
+        
+        // Смещаем текст ближе к краю, чтобы он не налезал на центральную кнопку
+        ctx.fillText(prizes[i], radius - 30, 4);
         ctx.restore();
     }
 
-    // Внутреннее аккуратное кольцо
+    // 3. Внешний тонкий неоновый контур всего колеса
     ctx.beginPath();
-    ctx.arc(center, center, 40, 0, 2 * Math.PI);
-    ctx.fillStyle = "#1f222c";
+    ctx.arc(center, center, radius - 10, 0, 2 * Math.PI);
+    ctx.strokeStyle = "rgba(0, 240, 255, 0.3)";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // 4. Центральная матовая подложка под кнопку (убираем дешевый желтый круг)
+    ctx.beginPath();
+    ctx.arc(center, center, 44, 0, 2 * Math.PI);
+    ctx.fillStyle = "#0d0e12";
     ctx.fill();
-    ctx.strokeStyle = "#222530";
+    ctx.strokeStyle = "#1f222c";
+    ctx.lineWidth = 2;
     ctx.stroke();
 }
 
 spinBtn.addEventListener('click', () => {
     if (isSpinning) return;
     isSpinning = true;
-    spinBtn.style.opacity = '0';
+    
+    // Вместо полного исчезновения делаем стильное затухание кнопки
+    spinBtn.style.opacity = '0.3';
     spinBtn.style.pointerEvents = 'none';
 
-    // Скрипт по-прежнему бьет точно в цель — сектор №1 ("💥 MEGA BONUS 💥")
+    // Скрипт подкрутки: бьем в сектор №1 ("MEGA BONUS")
     const targetSector = 1; 
     const sectorAngle = (2 * Math.PI) / numSectors;
     const targetAngle = (3 * Math.PI / 2) - (targetSector * sectorAngle) - (sectorAngle / 2);
@@ -91,14 +109,14 @@ spinBtn.addEventListener('click', () => {
     const totalRotation = (2 * Math.PI * 6) + targetAngle - (startAngle % (2 * Math.PI));
     
     let currentRotation = 0;
-    const duration = 4500; // Чуть более плавное и долгое кручение (4.5 сек)
+    const duration = 5000; // 5 секунд — более плавное, премиальное торможение
     const start = performance.now();
 
     function animate(now) {
         const elapsed = now - start;
         const progress = Math.min(elapsed / duration, 1);
         
-        // Плавный Ease-out
+        // Плавная кубическая функция замедления
         const easeOut = 1 - Math.pow(1 - progress, 4);
         
         startAngle = startAngle + (totalRotation * easeOut) - currentRotation;
@@ -124,4 +142,7 @@ claimBtn.addEventListener('click', () => {
     tg.close(); 
 });
 
-drawWheel();
+// Небольшой хак: ждем полной загрузки шрифтов перед первой отрисовкой колеса
+document.fonts.ready.then(() => {
+    drawWheel();
+});
