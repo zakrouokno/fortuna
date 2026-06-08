@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>3D Fortuna</title>
+    <title>SLOT SYSTEM PRO</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -20,7 +20,7 @@
         }
 
         body {
-            background: radial-gradient(circle at center, #161233 0%, #04040a 100%);
+            background: radial-gradient(circle at center, #0f1123 0%, #030407 100%);
             color: #ffffff;
             display: flex;
             justify-content: center;
@@ -33,162 +33,198 @@
             width: 100vw;
             max-width: 420px;
             height: 100vh;
-            padding: 35px 16px;
+            padding: 40px 20px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            perspective: 1200px;
         }
 
-        /* Очищений мінімалістичний хедер */
         .header {
             text-align: center;
-            margin-top: 15px;
+            margin-top: 10px;
             width: 100%;
         }
 
-        .header h1 {
-            font-size: 26px;
+        .header .system-title {
+            font-size: 32px;
             font-weight: 900;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            text-shadow: 0 4px 20px rgba(0, 240, 255, 0.15);
-            background: linear-gradient(180deg, #ffffff 0%, #8fa0ba 100%);
+            background: linear-gradient(180deg, #9451ff 0%, #00f0ff 100%);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+            margin-bottom: 5px;
         }
 
-        /* ТРЁХМЕРНАЯ СЦЕНА КРУЧЕНИЯ */
-        .wheel-stage {
+        .header h2 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #8fa0ba;
+            letter-spacing: 0.5px;
+        }
+
+        /* КАЗИНО СЛОТ-МАШИНА */
+        .slot-machine {
             position: relative;
-            width: 330px;
-            height: 330px;
+            width: 100%;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
+            gap: 12px;
+            padding: 20px 12px;
+            background: rgba(15, 17, 28, 0.6);
+            border: 2px solid rgba(148, 81, 255, 0.15);
+            border-radius: 24px;
+            box-shadow: 
+                0 30px 70px rgba(0, 0, 0, 0.9),
+                inset 0 0 40px rgba(148, 81, 255, 0.05);
             margin: auto 0;
-            transform: rotateX(22deg) rotateY(-2deg);
-            transform-style: preserve-3d;
         }
 
-        /* Мінімалістичний неоновий маркер */
-        .pointer-3d {
+        /* Маркер центральной выигрышной линии */
+        .slot-machine::before {
+            content: '▼';
             position: absolute;
-            top: -14px;
+            top: -12px;
             left: 50%;
-            transform: translateX(-50%) translateZ(40px);
-            width: 0;
-            height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-top: 20px solid #00f0ff;
-            filter: drop-shadow(0 0 10px #00f0ff);
-            z-index: 100;
+            transform: translateX(-50%);
+            color: #00f0ff;
+            font-size: 14px;
+            text-shadow: 0 0 10px #00f0ff;
+            z-index: 10;
         }
 
-        /* Обод колеса */
-        .wheel-outer-ring {
+        /* Вертикальный барабан */
+        .reel-window {
+            flex: 1;
+            height: 140px;
+            background: #07080e;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 10px 20px rgba(0,0,0,0.8), inset 0 -10px 20px rgba(0,0,0,0.8);
+        }
+
+        .reel-window.active-win {
+            border: 1.5px solid #00f0ff;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.2), inset 0 0 15px rgba(0, 240, 255, 0.1);
+        }
+
+        .reel-strip {
             position: absolute;
             width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: #0f111a;
-            border: 5px solid #1f2330;
-            box-shadow: 
-                0 25px 60px rgba(0, 0, 0, 0.85),
-                0 0 40px rgba(0, 240, 255, 0.15),
-                inset 0 0 30px rgba(0, 0, 0, 0.9);
-            transform-style: preserve-3d;
-        }
-
-        /* 3D тарелка колеса на чистом HTML/CSS */
-        .wheel-plate {
-            position: absolute;
-            width: calc(100% - 10px);
-            height: calc(100% - 10px);
-            border-radius: 50%;
-            overflow: hidden;
-            background: #07080a;
-            transition: transform 5s cubic-bezier(0.1, 0.85, 0.25, 1);
-            transform: translateZ(5px);
-        }
-
-        /* Тонкі світлові лінії секторів */
-        .sector-line {
-            position: absolute;
-            width: 1px;
-            height: 50%;
-            background: linear-gradient(to top, #1f2330, rgba(0, 240, 255, 0.3));
-            left: calc(50% - 0.5px);
             top: 0;
-            transform-origin: bottom center;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
 
-        /* Текст секторів (ідеально рівний, матовий та соковитий) */
-        .sector-text {
-            position: absolute;
-            width: 130px;
-            height: 40px;
-            left: calc(50% - 65px);
-            top: 35px;
-            transform-origin: center 125px;
+        /* Элемент внутри слота */
+        .slot-icon {
+            height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
+            padding: 10px;
+        }
+
+        .slot-icon .symbol {
+            font-size: 36px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 0%, #a5afc2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .slot-icon .label {
+            font-size: 10px;
+            font-weight: 800;
+            color: #4f5666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Подсветка джекпотных символов */
+        .slot-icon.jackpot .symbol {
+            background: linear-gradient(135deg, #00f0ff 0%, #0077ff 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
+        }
+
+        .slot-icon.jackpot .label {
+            color: #00f0ff;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }
+
+        /* КНОПКА ЗАПУСКА КАЗИНО-АППАРАТА */
+        #spin-btn {
+            width: 100%;
+            padding: 22px;
+            background: linear-gradient(180deg, #231d42 0%, #110e22 100%);
+            border: 2px solid #9451ff;
+            border-radius: 18px;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 20px rgba(148, 81, 255, 0.15);
+            transition: all 0.2s ease;
+        }
+
+        #spin-btn:not(:disabled):hover {
+            background: linear-gradient(180deg, #2f2759 0%, #181430 100%);
+            border-color: #00f0ff;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 25px rgba(0, 240, 255, 0.25);
+            color: #00f0ff;
+        }
+
+        #spin-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            border-color: rgba(148, 81, 255, 0.1);
+        }
+
+        /* Дополнительное меню снизу */
+        .bottom-nav {
+            width: 100%;
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
             font-size: 11px;
             font-weight: 700;
+            color: #4b5161;
+            text-align: center;
             text-transform: uppercase;
-            color: #9cb0d1;
             letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            line-height: 1.3;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
-        /* Потужне підсвічування головних бонусів */
-        .sector-text.neon-cyan {
-            color: #00f0ff;
-            text-shadow: 0 0 12px rgba(0, 240, 255, 0.6), 0 0 4px rgba(0, 240, 255, 0.3);
+        .nav-tab.active {
+            background: rgba(148, 81, 255, 0.04);
+            border-color: rgba(148, 81, 255, 0.15);
+            color: #9451ff;
         }
 
-        /* Сучасна кнопка START */
-        #spin-btn {
-            position: absolute;
-            width: 76px;
-            height: 76px;
-            background: radial-gradient(circle at 30% 30%, #252a3a 0%, #0f1117 70%, #06070a 100%);
-            border: 3px solid #00f0ff;
-            border-radius: 50%;
-            color: #00f0ff;
-            font-weight: 900;
-            font-size: 12px;
-            letter-spacing: 1px;
-            cursor: pointer;
-            z-index: 50;
-            transform: translateZ(32px);
-            box-shadow: 
-                0 15px 30px rgba(0,0,0,0.7), 
-                0 0 20px rgba(0, 240, 255, 0.3),
-                inset 0 2px 4px rgba(255,255,255,0.15);
-            transition: all 0.15s ease;
-        }
-
-        #spin-btn:active {
-            transform: translateZ(15px) scale(0.95);
-            box-shadow: 0 5px 12px rgba(0,0,0,0.6);
-        }
-
-        .footer-note {
-            font-size: 11px;
-            color: #50586e;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        /* Строга та дорога модалка БЕЗ ЕМОДЗІ */
+        /* Премиальная модалка выигрыша */
         .modal {
             display: none;
             position: fixed;
@@ -204,10 +240,10 @@
         }
 
         .modal-content {
-            background: radial-gradient(circle at top, #161a33 0%, #05060b 100%);
-            border: 1px solid rgba(0, 240, 255, 0.3);
+            background: radial-gradient(circle at top, #14172e 0%, #05060a 100%);
+            border: 1px solid rgba(0, 240, 255, 0.25);
             padding: 45px 24px;
-            border-radius: 20px;
+            border-radius: 24px;
             text-align: center;
             max-width: 340px;
             width: 100%;
@@ -225,7 +261,7 @@
             font-weight: 900;
             background: rgba(0, 240, 255, 0.05);
             color: #00f0ff;
-            padding: 5px 16px;
+            padding: 6px 16px;
             border-radius: 20px;
             margin-bottom: 20px;
             letter-spacing: 1.5px;
@@ -234,7 +270,7 @@
         }
 
         .modal h2 {
-            font-size: 21px;
+            font-size: 22px;
             font-weight: 900;
             margin-bottom: 20px;
             letter-spacing: 0.5px;
@@ -242,36 +278,36 @@
         }
 
         .prize-display {
-            background: #07080f;
+            background: #06070c;
             border: 1px solid rgba(255, 255, 255, 0.02);
-            padding: 24px 14px;
-            border-radius: 14px;
+            padding: 26px 14px;
+            border-radius: 16px;
             margin-bottom: 24px;
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.7);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.8);
         }
 
-        /* Виправлена помилка з коментарем: тепер тут чистий CSS */
         #prize-text {
-            font-size: 16px;
+            font-size: 17px;
             color: #00f0ff;
             font-weight: 700;
             line-height: 1.4;
             text-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+            text-transform: uppercase;
         }
 
         .modal-desc {
             font-size: 12px;
-            color: #5a627a;
+            color: #535a6e;
             line-height: 1.6;
             margin-bottom: 35px;
         }
 
         #claim-btn {
             width: 100%;
-            padding: 18px;
+            padding: 20px;
             background: linear-gradient(180deg, #00f0ff 0%, #0055ff 100%);
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             color: #000000;
             font-size: 14px;
             font-weight: 900;
@@ -285,21 +321,27 @@
 <body>
     <div class="app-container">
         <div class="header">
-            <h1>КОЛЕСО ФОРТУНИ</h1>
+            <div class="system-title">SLOT SYSTEM</div>
+            <h2>Ваш бонус готовий до роздачі!</h2>
         </div>
 
-        <div class="wheel-stage">
-            <div class="pointer-3d"></div>
-            <div class="wheel-outer-ring">
-                <div class="wheel-plate" id="wheel-plate">
-                    <!-- Сектори генеруються через JS -->
-                </div>
+        <div class="slot-machine">
+            <div class="reel-window" id="window-0">
+                <div class="reel-strip" id="reel-0"></div>
             </div>
-            <button id="spin-btn">START</button>
+            <div class="reel-window" id="window-1">
+                <div class="reel-strip" id="reel-1"></div>
+            </div>
+            <div class="reel-window" id="window-2">
+                <div class="reel-strip" id="reel-2"></div>
+            </div>
         </div>
 
-        <div class="footer-note">
-            Обертайте барабан та вигравайте
+        <button id="spin-btn">Крутити барабан і отримати бонус</button>
+
+        <div class="bottom-nav">
+            <div class="nav-tab active">Список призів</div>
+            <div class="nav-tab">Історія ваших бонусів</div>
         </div>
     </div>
 
@@ -308,7 +350,7 @@
             <div class="modal-badge">Система бонусів</div>
             <h2>ВИГРАШ СФОРМОВАНО</h2>
             <div class="prize-display">
-                <p id="prize-text">ЗАВАНТАЖЕННЯ...</p>
+                <p id="prize-text">ГЕНЕРАЦІЯ...</p>
             </div>
             <p class="modal-desc">Даний бонус успішно прикріплено до вашого Telegram ID. Поспішайте активувати його на сайті казино.</p>
             <button id="claim-btn">Отримати бонус</button>
@@ -319,11 +361,17 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        const wheelPlate = document.getElementById('wheel-plate');
         const spinBtn = document.getElementById('spin-btn');
         const modal = document.getElementById('win-modal');
         const prizeText = document.getElementById('prize-text');
         const claimBtn = document.getElementById('claim-btn');
+
+        const pool = [
+            { symbol: "%", label: "% до депозиту" },
+            { symbol: "ФС", label: "Безкоштовні спіни" },
+            { symbol: "+", label: "% на депозит" },
+            { symbol: "777", label: "БЕЗДЕПИ" }
+        ];
 
         const prizes = [
             "250 ФС + 200% БОНУС",
@@ -334,61 +382,71 @@
             "30 БЕЗКОШТОВНИХ СПІНІВ"
         ];
 
-        const numSectors = prizes.length;
-        const degreesPerSector = 360 / numSectors;
-        const colors = ["#141724", "#0a0c12", "#141724", "#0a0c12", "#141724", "#0a0c12"];
+        const itemHeight = 140;
+        const totalItemsInStrip = 30;
 
-        function initWheel() {
-            for (let i = 0; i < numSectors; i++) {
-                const rotation = i * degreesPerSector;
-                
-                const line = document.createElement('div');
-                line.className = 'sector-line';
-                line.style.transform = `rotate(${rotation}deg)`;
-                wheelPlate.appendChild(line);
-
-                const textDiv = document.createElement('div');
-                const textRotation = rotation + (degreesPerSector / 2);
-                
-                if (prizes[i].includes("250 ФС") || prizes[i].includes("VIP")) {
-                    textDiv.className = 'sector-text neon-cyan';
-                } else {
-                    textDiv.className = 'sector-text';
+        function createReels() {
+            for (let r = 0; r < 3; r++) {
+                const strip = document.getElementById(`reel-${r}`);
+                let html = '';
+                for (let i = 0; i < totalItemsInStrip; i++) {
+                    const item = pool[i % pool.length];
+                    const isJackpot = item.symbol === "777" ? 'jackpot' : '';
+                    html += `
+                        <div class="slot-icon ${isJackpot}">
+                            <div class="symbol">${item.symbol}</div>
+                            <div class="label">${item.label}</div>
+                        </div>
+                    `;
                 }
-                
-                textDiv.style.transform = `rotate(${textRotation}deg)`;
-                textDiv.style.backgroundColor = colors[i];
-                textDiv.innerText = prizes[i];
-                wheelPlate.appendChild(textDiv);
+                strip.innerHTML = html;
             }
         }
 
-        let currentRotation = 0;
         let isSpinning = false;
         let selectedPrize = "";
 
         spinBtn.addEventListener('click', () => {
             if (isSpinning) return;
             isSpinning = true;
+            spinBtn.disabled = true;
 
-            spinBtn.style.opacity = '0.3';
-            spinBtn.style.pointerEvents = 'none';
+            const prizeIndex = Math.floor(Math.random() * prizes.length);
+            selectedPrize = prizes[prizeIndex];
 
-            const randomSectorIndex = Math.floor(Math.random() * numSectors);
-            selectedPrize = prizes[randomSectorIndex];
+            let targetSymbol = "ФС";
+            if (selectedPrize.includes("БЕЗДЕП") || selectedPrize.includes("VIP")) targetSymbol = "777";
+            else if (selectedPrize.includes("200%")) targetSymbol = "%";
+            else if (selectedPrize.includes("150%")) targetSymbol = "+";
 
-            const targetSectorCenter = (randomSectorIndex * degreesPerSector) + (degreesPerSector / 2);
-            const targetRotation = 360 - targetSectorCenter;
+            const targetIndex = pool.findIndex(p => p.symbol === targetSymbol);
 
-            const additionalRotation = 1800 + targetRotation - (currentRotation % 360);
-            currentRotation += additionalRotation;
+            for (let r = 0; r < 3; r++) {
+                const strip = document.getElementById(`reel-${r}`);
+                const windowEl = document.getElementById(`window-${r}`);
+                
+                windowEl.classList.remove('active-win');
+                strip.style.transition = 'none';
+                strip.style.transform = 'translateY(0px)';
 
-            wheelPlate.style.transform = `translateZ(5px) rotate(${currentRotation}deg)`;
+                strip.offsetHeight;
+
+                const finalStopIndex = (totalItemsInStrip - 4) + targetIndex; 
+                const travelDistance = finalStopIndex * itemHeight;
+
+                const duration = 3 + (r * 0.8); 
+                strip.style.transition = `transform ${duration}s cubic-bezier(0.1, 0.9, 0.2, 1)`;
+                strip.style.transform = `translateY(-${travelDistance}px)`;
+
+                setTimeout(() => {
+                    windowEl.classList.add('active-win');
+                }, duration * 1000);
+            }
 
             setTimeout(() => {
-                prizeText.innerText = selectedPrize.toUpperCase();
+                prizeText.innerText = selectedPrize;
                 modal.classList.add('show');
-            }, 5100);
+            }, 5000);
         });
 
         claimBtn.addEventListener('click', () => {
@@ -396,7 +454,7 @@
             tg.close(); 
         });
 
-        initWheel();
+        createReels();
     </script>
 </body>
 </html>
