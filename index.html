@@ -3,39 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Колесо Фортуни</title>
+    <title>Преміум Бонус</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <!-- Подключаем Telegram WebApp API -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
     <div class="app-container">
         <div class="header">
-            <h1>🎰 КОЛЕСО ФОРТУНИ 🎰</h1>
-            <p>Твій ID: <span id="user-id">Гість</span></p>
-            <p class="subtitle">Крути колесо та забирай гарантований бонус до 250 ФС!</p>
+            <div class="brand-badge">PREMIUM SYSTEM</div>
+            <h1>ГЕНЕРАТОР БОНУСІВ</h1>
+            <p class="subtitle">Ваш ID: <span id="user-id">Гість</span> • Доступ активовано</p>
         </div>
 
         <div class="wheel-container">
-            <div class="pointer">▼</div>
-            <canvas id="wheel" width="350" height="350"></canvas>
-            <button id="spin-btn">КРУТИТИ</button>
+            <div class="pointer"></div>
+            <canvas id="wheel" width="360" height="360"></canvas>
+            <button id="spin-btn">START</button>
         </div>
 
-        <div class="live-status">
-            <div class="status-dot"></div>
-            <span>Зараз онлайн: 1,482 гравці</span>
+        <div class="footer-note">
+            Натисніть START для запуску системи
         </div>
     </div>
 
-    <!-- Модальное окно с выигрышем -->
     <div id="win-modal" class="modal">
         <div class="modal-content">
-            <h2>🔥 ЄБАТЬ, ЗАНОС! 🔥</h2>
-            <p class="prize-title">ТВІЙ ВИГРАШ:</p>
-            <p id="prize-text">250 БЕЗКОШТОВНИХ СПІНІВ + 200% ДО ДЕПОЗИТУ</p>
-            <p class="modal-info">Бонус успішно зафіксовано за твоїм Telegram ID. Для активації натисни кнопку нижче!</p>
-            <button id="claim-btn">🚀 ЗАБРАТИ БОНУС</button>
+            <div class="success-icon">✓</div>
+            <h2>БОНУС СФОРМОВАНО</h2>
+            <div class="prize-box">
+                <p id="prize-text">250 FREE SPINS + 200% BONUS</p>
+            </div>
+            <p class="modal-info">Приз успішно закріплено за вашим профілем та готовий до активації.</p>
+            <button id="claim-btn">ОТРИМАТИ</button>
         </div>
     </div>
 
