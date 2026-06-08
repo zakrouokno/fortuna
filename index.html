@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
@@ -6,7 +6,7 @@
     <title>3D Fortuna Premium</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2 family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     
     <style>
@@ -38,13 +38,13 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            perspective: 1000px; /* Включаем 3D перспективу для всего экрана */
+            perspective: 1000px;
         }
 
         /* Хедер */
         .header {
             text-align: center;
-            margin-top: 10px;
+            margin-top: 15px;
             width: 100%;
         }
 
@@ -78,7 +78,7 @@
             justify-content: center;
             align-items: center;
             margin: auto 0;
-            transform: rotateX(20deg); /* Наклоняем колесо от зрителя для эффекта 3D глубины */
+            transform: rotateX(20deg); 
             transform-style: preserve-3d;
         }
 
@@ -87,7 +87,7 @@
             position: absolute;
             top: -12px;
             left: 50%;
-            transform: translateX(-50%) translateZ(30px); /* Выносим маркер вперед в 3D пространстве */
+            transform: translateX(-50%) translateZ(30px); 
             width: 6px;
             height: 24px;
             background: linear-gradient(180deg, #ff0055, #990033);
@@ -104,7 +104,6 @@
                 0 20px 40px rgba(0, 0, 0, 0.8),
                 0 0 30px rgba(127, 0, 255, 0.2),
                 inset 0 0 20px rgba(0, 0, 0, 0.9);
-            transition: transform 5s cubic-bezier(0.15, 0.85, 0.2, 1); /* Нативное плавное торможение */
             transform: translateZ(0);
         }
 
@@ -122,7 +121,6 @@
             letter-spacing: 1px;
             cursor: pointer;
             z-index: 50;
-            /* Выдавливаем кнопку на 25px вперед на зрителя */
             transform: translateZ(25px); 
             box-shadow: 
                 0 10px 20px rgba(0,0,0,0.6), 
@@ -240,7 +238,6 @@
             <h1>КОЛЕСО ФОРТУНИ</h1>
         </div>
 
-        <!-- 3D Сцена с колесом -->
         <div class="wheel-3d-stage">
             <div class="pointer-3d"></div>
             <canvas id="wheel" width="340" height="340"></canvas>
@@ -252,7 +249,6 @@
         </div>
     </div>
 
-    <!-- Модалка выигрыша -->
     <div id="win-modal" class="modal">
         <div class="modal-content">
             <div class="modal-badge">ВИТЯГ З СИСТЕМИ</div>
@@ -265,6 +261,133 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        const canvas = document.getElementById('wheel');
+        const ctx = canvas.getContext('2d');
+        const spinBtn = document.getElementById('spin-btn');
+        const modal = document.getElementById('win-modal');
+        const prizeText = document.getElementById('prize-text');
+        const claimBtn = document.getElementById('claim-btn');
+
+        const prizes = [
+            "250 ФС + 200% БОНУС",
+            "50 БЕЗКОШТОВНИХ СПІНІВ",
+            "150% НА ПЕРШИЙ ДЕПОЗИТ",
+            "100 БЕЗКОШТОВНИХ СПІНІВ",
+            "VIP ПРОМОКОД НА БЕЗДЕП",
+            "30 БЕЗКОШТОВНИХ СПІНІВ"
+        ];
+
+        const colors = ["#171926", "#10121a", "#171926", "#10121a", "#171926", "#10121a"];
+        const numSectors = prizes.length;
+        const arc = 2 * Math.PI / numSectors;
+
+        let currentAngle = 0; 
+        let isSpinning = false;
+        let selectedPrize = "";
+
+        function drawWheel() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const radius = canvas.width / 2;
+            const center = radius;
+
+            ctx.save();
+            ctx.translate(center, center);
+            ctx.rotate(currentAngle); 
+            ctx.translate(-center, -center);
+
+            for (let i = 0; i < numSectors; i++) {
+                const angle = i * arc;
+                ctx.fillStyle = colors[i];
+                
+                ctx.beginPath();
+                ctx.moveTo(center, center);
+                ctx.arc(center, center, radius - 6, angle, angle + arc);
+                ctx.lineTo(center, center);
+                ctx.fill();
+                
+                ctx.strokeStyle = "#1f2230";
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                ctx.save();
+                ctx.fillStyle = "#8a8f9f";
+                
+                if (prizes[i].includes("250 ФС") || prizes[i].includes("VIP")) {
+                    ctx.fillStyle = "#00f0ff";
+                }
+                
+                ctx.translate(center, center);
+                ctx.rotate(angle + arc / 2);
+                ctx.textAlign = "right";
+                ctx.font = "bold 11px 'Inter', sans-serif";
+                ctx.letterSpacing = "0.5px";
+                ctx.fillText(prizes[i], radius - 25, 4);
+                ctx.restore();
+            }
+
+            ctx.beginPath();
+            ctx.arc(center, center, radius - 6, 0, 2 * Math.PI);
+            ctx.strokeStyle = "rgba(0, 240, 255, 0.25)";
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        spinBtn.addEventListener('click', () => {
+            if (isSpinning) return;
+            isSpinning = true;
+
+            spinBtn.style.opacity = '0.3';
+            spinBtn.style.pointerEvents = 'none';
+
+            // Полный честный рандом секторов
+            const randomSectorIndex = Math.floor(Math.random() * numSectors);
+            selectedPrize = prizes[randomSectorIndex];
+
+            const sectorAngle = (2 * Math.PI) / numSectors;
+            const targetAngle = (3 * Math.PI / 2) - (randomSectorIndex * sectorAngle) - (sectorAngle / 2);
+            
+            const totalRotation = (2 * Math.PI * 6) + targetAngle - (currentAngle % (2 * Math.PI));
+            
+            const startRotation = currentAngle;
+            const duration = 5000; 
+            const startTimestamp = performance.now();
+
+            function animate(now) {
+                const elapsed = now - startTimestamp;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                const easeOut = 1 - Math.pow(1 - progress, 4);
+                currentAngle = startRotation + (totalRotation * easeOut);
+                
+                drawWheel();
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    setTimeout(() => {
+                        prizeText.innerText = selectedPrize.toUpperCase();
+                        modal.classList.add('show');
+                    }, 500);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        });
+
+        claimBtn.addEventListener('click', () => {
+            tg.sendData(selectedPrize); 
+            tg.close(); 
+        });
+
+        document.fonts.ready.then(() => {
+            drawWheel();
+        });
+    </script>
 </body>
 </html>
