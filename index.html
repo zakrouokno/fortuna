@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Колесо Фортуни</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Подключаем Telegram WebApp API -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <h1>🎰 КОЛЕСО ФОРТУНИ 🎰</h1>
+            <p>Твій ID: <span id="user-id">Гість</span></p>
+            <p class="subtitle">Крути колесо та забирай гарантований бонус до 250 ФС!</p>
+        </div>
+
+        <div class="wheel-container">
+            <div class="pointer">▼</div>
+            <canvas id="wheel" width="350" height="350"></canvas>
+            <button id="spin-btn">КРУТИТИ</button>
+        </div>
+
+        <div class="live-status">
+            <div class="status-dot"></div>
+            <span>Зараз онлайн: 1,482 гравці</span>
+        </div>
+    </div>
+
+    <!-- Модальное окно с выигрышем -->
+    <div id="win-modal" class="modal">
+        <div class="modal-content">
+            <h2>🔥 ЄБАТЬ, ЗАНОС! 🔥</h2>
+            <p class="prize-title">ТВІЙ ВИГРАШ:</p>
+            <p id="prize-text">250 БЕЗКОШТОВНИХ СПІНІВ + 200% ДО ДЕПОЗИТУ</p>
+            <p class="modal-info">Бонус успішно зафіксовано за твоїм Telegram ID. Для активації натисни кнопку нижче!</p>
+            <button id="claim-btn">🚀 ЗАБРАТИ БОНУС</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
