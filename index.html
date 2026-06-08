@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Premium Promo</title>
+    <title>3D Fortuna Premium</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2 family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     
     <style>
@@ -20,7 +20,7 @@
         }
 
         body {
-            background: radial-gradient(circle at top, #161933 0%, #05060d 100%);
+            background: radial-gradient(circle at center, #18122b 0%, #060409 100%);
             color: #ffffff;
             display: flex;
             justify-content: center;
@@ -38,202 +38,111 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
+            perspective: 1000px; /* Включаем 3D перспективу для всего экрана */
         }
 
         /* Хедер */
         .header {
             text-align: center;
-            margin-top: 15px;
+            margin-top: 10px;
             width: 100%;
         }
 
-        .brand-logo {
+        .brand-badge {
+            display: inline-block;
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 2.5px;
+            color: #00f0ff;
+            background: rgba(0, 240, 255, 0.07);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            padding: 5px 14px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .header h1 {
             font-size: 24px;
             font-weight: 900;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            background: linear-gradient(90deg, #00f0ff, #7f00ff);
-            -webkit-background-clip: text;
-            background-clip: text; /* Фикс ошибки из скриншота */
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 2px 8px rgba(0, 240, 255, 0.2));
+            letter-spacing: 1px;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
 
-        .header h2 {
-            font-size: 21px;
-            font-weight: 700;
-            line-height: 1.4;
-            color: #f1f3f7;
-            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
-        }
-
-        /* Контейнер выбора бонусов */
-        .promo-slider {
+        /* ТРЁХМЕРНЫЙ КОНТЕЙНЕР ДЛЯ КОЛЕСА */
+        .wheel-3d-stage {
             position: relative;
-            width: 100%;
+            width: 340px;
+            height: 340px;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
             margin: auto 0;
+            transform: rotateX(20deg); /* Наклоняем колесо от зрителя для эффекта 3D глубины */
+            transform-style: preserve-3d;
         }
 
-        .pointer-arrow {
-            font-size: 20px;
-            color: #00ffcc;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 8px rgba(0, 255, 204, 0.6));
-            animation: bounce 1.5s infinite;
+        /* Кастомный неоновый 3D маркер сверху */
+        .pointer-3d {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%) translateZ(30px); /* Выносим маркер вперед в 3D пространстве */
+            width: 6px;
+            height: 24px;
+            background: linear-gradient(180deg, #ff0055, #990033);
+            box-shadow: 0 0 15px #ff0055, 0 5px 10px rgba(0,0,0,0.5);
+            z-index: 100;
+            border-radius: 3px;
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-
-        .cards-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-        }
-
-        /* Дорогие 3D карточки */
-        .promo-card {
-            position: relative;
-            flex: 1;
-            height: 195px;
-            border-radius: 16px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            padding: 22px 10px;
-            background: rgba(255, 255, 255, 0.01);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 12px 30px rgba(0, 0, 0, 0.7);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            overflow: hidden;
-            opacity: 0.3;
-            transform: scale(0.9);
-        }
-
-        .card-purple { background: linear-gradient(180deg, rgba(38, 12, 59, 0.6) 0%, rgba(12, 4, 20, 0.85) 100%); }
-        .card-green { background: linear-gradient(180deg, rgba(10, 43, 30, 0.6) 0%, rgba(4, 15, 10, 0.85) 100%); }
-        .card-blue { background: linear-gradient(180deg, rgba(12, 26, 61, 0.6) 0%, rgba(4, 8, 20, 0.85) 100%); }
-
-        /* Эффекты АКТИВНОЙ карты */
-        .promo-card.active {
-            opacity: 1;
-            transform: scale(1.06) translateY(-4px);
-        }
-
-        .card-purple.active { border-color: #d900ff; box-shadow: 0 0 30px rgba(217, 0, 255, 0.25), inset 0 1px 8px rgba(217, 0, 255, 0.15); }
-        .card-green.active { border-color: #00ffcc; box-shadow: 0 0 30px rgba(0, 255, 204, 0.25), inset 0 1px 8px rgba(0, 255, 204, 0.15); }
-        .card-blue.active { border-color: #0077ff; box-shadow: 0 0 30px rgba(0, 119, 255, 0.25), inset 0 1px 8px rgba(0, 119, 255, 0.15); }
-
-        /* Иконки */
-        .card-icon-wrap {
-            width: 58px;
-            height: 58px;
+        /* Само колесо (Canvas) с поддержкой объёмных теней */
+        #wheel {
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 10px;
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
-            transition: transform 0.3s;
+            background-color: #0d0e12;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.8),
+                0 0 30px rgba(127, 0, 255, 0.2),
+                inset 0 0 20px rgba(0, 0, 0, 0.9);
+            transition: transform 5s cubic-bezier(0.15, 0.85, 0.2, 1); /* Нативное плавное торможение */
+            transform: translateZ(0);
         }
 
-        .promo-card.active .card-icon-wrap {
-            transform: scale(1.1);
-        }
-
-        .neon-icon {
-            font-size: 22px;
-            font-weight: 900;
-            text-shadow: 0 0 12px currentColor;
-        }
-        .card-purple .neon-icon { color: #e000ff; }
-        .card-green .neon-icon { color: #00ffcc; }
-        .card-blue .neon-icon { color: #0088ff; }
-
-        .card-title {
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            text-align: center;
-            color: #8fa0ba;
-            text-transform: uppercase;
-        }
-        .promo-card.active .card-title {
-            color: #ffffff;
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
-        }
-
-        /* Блок управления */
-        .controls-block {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-            margin-bottom: 12px;
-        }
-
-        /* ГРАДИЕНТНАЯ НЕОНОВАЯ КНОПКА НА ВСЮ ШИРИНУ */
+        /* Объёмная парящая кнопка START по центру */
         #spin-btn {
-            width: 100%;
-            padding: 20px;
-            background: linear-gradient(180deg, #153a30 0%, #071712 100%);
-            border: 1.5px solid #00ffcc;
-            border-radius: 12px;
-            color: #ffffff;
-            font-size: 13px;
-            font-weight: 800;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
+            position: absolute;
+            width: 76px;
+            height: 76px;
+            background: radial-gradient(circle at 35% 35%, #ffffff 0%, #d1d5db 50%, #9ca3af 100%);
+            border: 4px solid #111317;
+            border-radius: 50%;
+            color: #0a0b0d;
+            font-weight: 900;
+            font-size: 11px;
+            letter-spacing: 1px;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.15), inset 0 1px 1px rgba(255,255,255,0.1);
-            text-shadow: 0 1px 2px rgba(0,0,0,0.6);
-            transition: all 0.2s ease;
+            z-index: 50;
+            /* Выдавливаем кнопку на 25px вперед на зрителя */
+            transform: translateZ(25px); 
+            box-shadow: 
+                0 10px 20px rgba(0,0,0,0.6), 
+                0 0 15px rgba(255,255,255,0.2),
+                inset 0 -3px 5px rgba(0,0,0,0.3);
+            transition: all 0.15s ease;
         }
 
         #spin-btn:active {
-            transform: scale(0.98);
-            background: linear-gradient(180deg, #00ffcc 0%, #00b38f 100%);
-            color: #05060d;
-            box-shadow: 0 0 30px #00ffcc;
-            text-shadow: none;
+            transform: translateZ(10px) scale(0.95);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.6);
         }
 
-        /* Табы */
-        .tabs-menu {
-            display: flex;
-            background: #0e101d;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            border-radius: 12px;
-            padding: 5px;
-            width: 100%;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-        }
-
-        .tab-item {
-            flex: 1;
-            text-align: center;
-            padding: 13px;
-            font-size: 12px;
+        /* Нижний блок */
+        .footer-note {
+            font-size: 11px;
+            color: #4b4f63;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
             font-weight: 600;
-            color: #4e5569;
-            border-radius: 8px;
-        }
-
-        .tab-item.active {
-            background: #191c32;
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.03);
         }
 
         /* Модалка выигрыша */
@@ -244,64 +153,68 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(4, 5, 10, 0.98);
-            z-index: 100;
+            background: rgba(5, 4, 10, 0.98);
+            z-index: 1000;
             justify-content: center;
             align-items: center;
             padding: 24px;
         }
 
         .modal-content {
-            background: radial-gradient(circle at top, #1a1d3a 0%, #090a12 100%);
-            border: 1px solid rgba(0, 255, 204, 0.35);
+            background: radial-gradient(circle at top, #1f1a3a 0%, #08060c 100%);
+            border: 1px solid rgba(0, 240, 255, 0.3);
             padding: 45px 24px;
             border-radius: 24px;
             text-align: center;
             max-width: 350px;
             width: 100%;
-            box-shadow: 0 0 45px rgba(0, 255, 204, 0.12);
+            box-shadow: 0 0 40px rgba(0, 240, 255, 0.15);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
         }
 
         .modal.show { display: flex; }
+        .modal.show .modal-content { transform: translateY(0); }
 
         .modal-badge {
             display: inline-block;
             font-size: 10px;
             font-weight: 900;
-            background: rgba(0, 255, 204, 0.08);
-            color: #00ffcc;
+            background: rgba(0, 240, 255, 0.08);
+            color: #00f0ff;
             padding: 5px 16px;
             border-radius: 20px;
             margin-bottom: 20px;
-            letter-spacing: 1px;
-            border: 1px solid rgba(0, 255, 204, 0.15);
+            letter-spacing: 1.5px;
+            border: 1px solid rgba(0, 240, 255, 0.15);
         }
 
         .modal h2 {
-            font-size: 21px;
-            font-weight: 800;
+            font-size: 22px;
+            font-weight: 900;
             margin-bottom: 20px;
         }
 
         .prize-display {
-            background: rgba(0, 0, 0, 0.35);
+            background: rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.03);
-            padding: 22px 12px;
-            border-radius: 14px;
+            padding: 24px 14px;
+            border-radius: 16px;
             margin-bottom: 24px;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
         }
 
         #prize-text {
             font-size: 16px;
-            color: #00ffcc;
+            color: #00f0ff;
             font-weight: 700;
             line-height: 1.4;
-            text-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
         }
 
         .modal-desc {
             font-size: 12px;
-            color: #555b70;
+            color: #585d70;
             line-height: 1.6;
             margin-bottom: 35px;
         }
@@ -309,69 +222,45 @@
         #claim-btn {
             width: 100%;
             padding: 18px;
-            background: linear-gradient(180deg, #00ffcc 0%, #00b38f 100%);
+            background: linear-gradient(180deg, #00f0ff 0%, #0077ff 100%);
             border: none;
             border-radius: 12px;
-            color: #05060d;
+            color: #000000;
             font-size: 14px;
-            font-weight: 800;
+            font-weight: 900;
             cursor: pointer;
-            box-shadow: 0 5px 25px rgba(0, 255, 204, 0.35);
+            box-shadow: 0 5px 25px rgba(0, 240, 255, 0.35);
         }
     </style>
 </head>
 <body>
     <div class="app-container">
         <div class="header">
-            <div class="brand-logo">SLOT SYSTEM</div>
-            <h2>Ваш бонус готовий до роздачі!</h2>
+            <div class="brand-badge">PREMIUM SYSTEM</div>
+            <h1>КОЛЕСО ФОРТУНИ</h1>
         </div>
 
-        <div class="promo-slider">
-            <div class="pointer-arrow">▼</div>
-            
-            <div class="cards-container">
-                <div class="promo-card card-purple" id="card-0">
-                    <div class="card-icon-wrap">
-                        <div class="neon-icon">%</div>
-                    </div>
-                    <div class="card-title">% до депозиту</div>
-                </div>
-
-                <div class="promo-card card-green active" id="card-1">
-                    <div class="card-icon-wrap">
-                        <div class="neon-icon">777</div>
-                    </div>
-                    <div class="card-title">Бездепи</div>
-                </div>
-
-                <div class="promo-card card-blue" id="card-2">
-                    <div class="card-icon-wrap">
-                        <div class="neon-icon">+</div>
-                    </div>
-                    <div class="card-title">% на депозит</div>
-                </div>
-            </div>
+        <!-- 3D Сцена с колесом -->
+        <div class="wheel-3d-stage">
+            <div class="pointer-3d"></div>
+            <canvas id="wheel" width="340" height="340"></canvas>
+            <button id="spin-btn">START</button>
         </div>
 
-        <div class="controls-block">
-            <button id="spin-btn">Крутити барабан і отримати бонус</button>
-            
-            <div class="tabs-menu">
-                <div class="tab-item active">Список призів</div>
-                <div class="tab-item">Історія ваших бонусів</div>
-            </div>
+        <div class="footer-note">
+            Обертайте барабан та вигравайте
         </div>
     </div>
 
+    <!-- Модалка выигрыша -->
     <div id="win-modal" class="modal">
         <div class="modal-content">
-            <div class="modal-badge">УСПІШНО</div>
-            <h2>БОНУС ЗГЕНЕРОВАНО!</h2>
+            <div class="modal-badge">ВИТЯГ З СИСТЕМИ</div>
+            <h2>ВАШ ПРИЗ ЗГЕНЕРОВАНО!</h2>
             <div class="prize-display">
-                <p id="prize-text">250 БЕЗКОШТОВНИХ СПІНІВ + 200% ДО ДЕПОЗИТУ</p>
+                <p id="prize-text">ЗАВАНТАЖЕННЯ...</p>
             </div>
-            <p class="modal-desc">Система закріпила цей промокод за вашим ID. Активація доступна протягом 30 хвилин.</p>
+            <p class="modal-desc">Даний бонус успішно прикріплено до вашого Telegram ID. Поспішайте активувати його на сайті.</p>
             <button id="claim-btn">🚀 ЗАБРАТИ БОНУС</button>
         </div>
     </div>
