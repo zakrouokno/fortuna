@@ -3,401 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>3D Fortuna</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <title>Завантаження системи...</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-
         body {
-            background: radial-gradient(circle at center, #161233 0%, #04040a 100%);
+            background: #030408;
             color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            overflow: hidden;
-        }
-
-        .app-container {
-            width: 100vw;
-            max-width: 420px;
             height: 100vh;
-            padding: 35px 16px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            perspective: 1200px;
+            margin: 0;
         }
-
-        /* Очищений мінімалістичний хедер */
-        .header {
+        .loader {
             text-align: center;
-            margin-top: 15px;
-            width: 100%;
         }
-
-        .header h1 {
-            font-size: 26px;
-            font-weight: 900;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            text-shadow: 0 4px 20px rgba(0, 240, 255, 0.15);
-            background: linear-gradient(180deg, #ffffff 0%, #8fa0ba 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* ТРЁХМЕРНАЯ СЦЕНА КРУЧЕНИЯ */
-        .wheel-stage {
-            position: relative;
-            width: 330px;
-            height: 330px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: auto 0;
-            transform: rotateX(22deg) rotateY(-2deg);
-            transform-style: preserve-3d;
-        }
-
-        /* Мінімалістичний неоновий маркер */
-        .pointer-3d {
-            position: absolute;
-            top: -14px;
-            left: 50%;
-            transform: translateX(-50%) translateZ(40px);
-            width: 0;
-            height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-top: 20px solid #00f0ff;
-            filter: drop-shadow(0 0 10px #00f0ff);
-            z-index: 100;
-        }
-
-        /* Обод колеса */
-        .wheel-outer-ring {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: #0f111a;
-            border: 5px solid #1f2330;
-            box-shadow: 
-                0 25px 60px rgba(0, 0, 0, 0.85),
-                0 0 40px rgba(0, 240, 255, 0.15),
-                inset 0 0 30px rgba(0, 0, 0, 0.9);
-            transform-style: preserve-3d;
-        }
-
-        /* 3D тарелка колеса на чистом HTML/CSS */
-        .wheel-plate {
-            position: absolute;
-            width: calc(100% - 10px);
-            height: calc(100% - 10px);
-            border-radius: 50%;
-            overflow: hidden;
-            background: #07080a;
-            transition: transform 5s cubic-bezier(0.1, 0.85, 0.25, 1);
-            transform: translateZ(5px);
-        }
-
-        /* Тонкі світлові лінії секторів */
-        .sector-line {
-            position: absolute;
-            width: 1px;
-            height: 50%;
-            background: linear-gradient(to top, #1f2330, rgba(0, 240, 255, 0.3));
-            left: calc(50% - 0.5px);
-            top: 0;
-            transform-origin: bottom center;
-        }
-
-        /* Текст секторів (ідеально рівний, матовий та соковитий) */
-        .sector-text {
-            position: absolute;
-            width: 130px;
+        .spinner {
+            width: 40px;
             height: 40px;
-            left: calc(50% - 65px);
-            top: 35px;
-            transform-origin: center 125px;
-            text-align: center;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: #9cb0d1;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            line-height: 1.3;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-        }
-
-        /* Потужне підсвічування головних бонусів */
-        .sector-text.neon-cyan {
-            color: #00f0ff;
-            text-shadow: 0 0 12px rgba(0, 240, 255, 0.6), 0 0 4px rgba(0, 240, 255, 0.3);
-        }
-
-        /* Сучасна кнопка START */
-        #spin-btn {
-            position: absolute;
-            width: 76px;
-            height: 76px;
-            background: radial-gradient(circle at 30% 30%, #252a3a 0%, #0f1117 70%, #06070a 100%);
-            border: 3px solid #00f0ff;
+            border: 3px solid rgba(0, 240, 255, 0.1);
+            border-top: 3px solid #00f0ff;
             border-radius: 50%;
-            color: #00f0ff;
-            font-weight: 900;
-            font-size: 12px;
-            letter-spacing: 1px;
-            cursor: pointer;
-            z-index: 50;
-            transform: translateZ(32px);
-            box-shadow: 
-                0 15px 30px rgba(0,0,0,0.7), 
-                0 0 20px rgba(0, 240, 255, 0.3),
-                inset 0 2px 4px rgba(255,255,255,0.15);
-            transition: all 0.15s ease;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 15px;
         }
-
-        #spin-btn:active {
-            transform: translateZ(15px) scale(0.95);
-            box-shadow: 0 5px 12px rgba(0,0,0,0.6);
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-
-        .footer-note {
-            font-size: 11px;
-            color: #50586e;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        /* Строга та дорога модалка БЕЗ ЕМОДЗІ */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(3, 4, 7, 0.98);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 24px;
-        }
-
-        .modal-content {
-            background: radial-gradient(circle at top, #161a33 0%, #05060b 100%);
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            padding: 45px 24px;
-            border-radius: 20px;
-            text-align: center;
-            max-width: 340px;
-            width: 100%;
-            box-shadow: 0 0 50px rgba(0, 240, 255, 0.15);
-            transform: translateY(20px);
-            transition: transform 0.3s ease;
-        }
-
-        .modal.show { display: flex; }
-        .modal.show .modal-content { transform: translateY(0); }
-
-        .modal-badge {
-            display: inline-block;
-            font-size: 10px;
-            font-weight: 900;
-            background: rgba(0, 240, 255, 0.05);
-            color: #00f0ff;
-            padding: 5px 16px;
-            border-radius: 20px;
-            margin-bottom: 20px;
-            letter-spacing: 1.5px;
-            border: 1px solid rgba(0, 240, 255, 0.15);
-            text-transform: uppercase;
-        }
-
-        .modal h2 {
-            font-size: 21px;
-            font-weight: 900;
-            margin-bottom: 20px;
-            letter-spacing: 0.5px;
-            color: #ffffff;
-        }
-
-        .prize-display {
-            background: #07080f;
-            border: 1px solid rgba(255, 255, 255, 0.02);
-            padding: 24px 14px;
-            border-radius: 14px;
-            margin-bottom: 24px;
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.7);
-        }
-
-        /* Виправлена помилка з коментарем: тепер тут чистий CSS */
-        #prize-text {
-            font-size: 16px;
-            color: #00f0ff;
-            font-weight: 700;
-            line-height: 1.4;
-            text-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
-        }
-
-        .modal-desc {
-            font-size: 12px;
-            color: #5a627a;
-            line-height: 1.6;
-            margin-bottom: 35px;
-        }
-
-        #claim-btn {
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(180deg, #00f0ff 0%, #0055ff 100%);
-            border: none;
-            border-radius: 12px;
-            color: #000000;
+        p {
             font-size: 14px;
-            font-weight: 900;
-            cursor: pointer;
-            box-shadow: 0 5px 25px rgba(0, 240, 255, 0.35);
-            text-transform: uppercase;
+            color: #79859c;
             letter-spacing: 0.5px;
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <div class="header">
-            <h1>КОЛЕСО ФОРТУНИ</h1>
-        </div>
-
-        <div class="wheel-stage">
-            <div class="pointer-3d"></div>
-            <div class="wheel-outer-ring">
-                <div class="wheel-plate" id="wheel-plate">
-                    <!-- Сектори генеруються через JS -->
-                </div>
-            </div>
-            <button id="spin-btn">START</button>
-        </div>
-
-        <div class="footer-note">
-            Обертайте барабан та вигравайте
-        </div>
-    </div>
-
-    <div id="win-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-badge">Система бонусів</div>
-            <h2>ВИГРАШ СФОРМОВАНО</h2>
-            <div class="prize-display">
-                <p id="prize-text">ЗАВАНТАЖЕННЯ...</p>
-            </div>
-            <p class="modal-desc">Даний бонус успішно прикріплено до вашого Telegram ID. Поспішайте активувати його на сайті казино.</p>
-            <button id="claim-btn">Отримати бонус</button>
-        </div>
+    <div class="loader">
+        <div class="spinner"></div>
+        <p>Перехід на безпечну сторінку...</p>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        const wheelPlate = document.getElementById('wheel-plate');
-        const spinBtn = document.getElementById('spin-btn');
-        const modal = document.getElementById('win-modal');
-        const prizeText = document.getElementById('prize-text');
-        const claimBtn = document.getElementById('claim-btn');
+        // Твоя рефка на казино
+        const casinoLink = "https://1casinowin.com/?refcode=68ee9add-a6e4-4cc3-b714-09930c4ff705&subid={{subid}}&clickid={{clickid}}&utm_source=tg&utm_medium=zakrouokno_-__(tt+tg)&utm_campaign=zakrouoknotg";
 
-        const prizes = [
-            "250 ФС + 200% БОНУС",
-            "50 БЕЗКОШТОВНИХ СПІНІВ",
-            "150% НА ПЕРШИЙ ДЕПОЗИТ",
-            "100 БЕЗКОШТОВНИХ СПІНІВ",
-            "VIP ПРОМОКОД НА БЕЗДЕП",
-            "30 БЕЗКОШТОВНИХ СПІНІВ"
-        ];
-
-        const numSectors = prizes.length;
-        const degreesPerSector = 360 / numSectors;
-        const colors = ["#141724", "#0a0c12", "#141724", "#0a0c12", "#141724", "#0a0c12"];
-
-        function initWheel() {
-            for (let i = 0; i < numSectors; i++) {
-                const rotation = i * degreesPerSector;
-                
-                const line = document.createElement('div');
-                line.className = 'sector-line';
-                line.style.transform = `rotate(${rotation}deg)`;
-                wheelPlate.appendChild(line);
-
-                const textDiv = document.createElement('div');
-                const textRotation = rotation + (degreesPerSector / 2);
-                
-                if (prizes[i].includes("250 ФС") || prizes[i].includes("VIP")) {
-                    textDiv.className = 'sector-text neon-cyan';
-                } else {
-                    textDiv.className = 'sector-text';
-                }
-                
-                textDiv.style.transform = `rotate(${textRotation}deg)`;
-                textDiv.style.backgroundColor = colors[i];
-                textDiv.innerText = prizes[i];
-                wheelPlate.appendChild(textDiv);
-            }
-        }
-
-        let currentRotation = 0;
-        let isSpinning = false;
-        let selectedPrize = "";
-
-        spinBtn.addEventListener('click', () => {
-            if (isSpinning) return;
-            isSpinning = true;
-
-            spinBtn.style.opacity = '0.3';
-            spinBtn.style.pointerEvents = 'none';
-
-            const randomSectorIndex = Math.floor(Math.random() * numSectors);
-            selectedPrize = prizes[randomSectorIndex];
-
-            const targetSectorCenter = (randomSectorIndex * degreesPerSector) + (degreesPerSector / 2);
-            const targetRotation = 360 - targetSectorCenter;
-
-            const additionalRotation = 1800 + targetRotation - (currentRotation % 360);
-            currentRotation += additionalRotation;
-
-            wheelPlate.style.transform = `translateZ(5px) rotate(${currentRotation}deg)`;
-
-            setTimeout(() => {
-                prizeText.innerText = selectedPrize.toUpperCase();
-                modal.classList.add('show');
-            }, 5100);
-        });
-
-        claimBtn.addEventListener('click', () => {
-            tg.sendData(selectedPrize); 
-            tg.close(); 
-        });
-
-        initWheel();
+        // Отправляем в бот технический триггер, что переход совершён
+        setTimeout(() => {
+            tg.sendData("REDIRECT_SUCCESS");
+            // Открываем казино прямо внутри или через браузер
+            tg.openLink(casinoLink);
+            tg.close();
+        }, 350);
     </script>
 </body>
 </html>
-
